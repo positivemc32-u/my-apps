@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>荒谷町 会計帳簿</title>
+  <title>会計帳簿</title>
   <style>
 :root {
   --bg: #f6f4ef;
@@ -174,7 +174,7 @@ table.ledger { border-collapse: collapse; width: 100%; background: #fff; }
 </head>
 <body>
   <header class="topbar">
-    <h1>荒谷町 会計帳簿</h1>
+    <h1 id="appTitle">会計帳簿</h1>
     <nav class="tabs" id="tabs">
       <button type="button" data-tab="ledger" class="active">📒 帳簿</button>
       <button type="button" data-tab="photo">📷 写真から</button>
@@ -239,20 +239,22 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 //# sourceMappingURL=exceljs.min.js.map
 </script>
   <script>
-/* 荒谷町 会計帳簿アプリ
+/* 町内会などの 会計帳簿アプリ
  * サーバー不要。データはこのパソコン（ブラウザ）の中に保存し、
  * Excel とバックアップファイルで持ち出し・引き継ぎをする。
  */
 'use strict';
 
-const STORE_KEY = 'aratani-kaikei-v1';
+const STORE_KEY = 'kaikei-v1';
+// ⚠️ 町名・人の名前などは、このファイルに書かないでください（GitHub で公開されています）。
+//    町名は「📝 候補の登録」の「町（地区）の名前」で入れ、その端末の中にだけ保存します。
 const APP_VERSION = 1;
 const MANUAL = '__manual__';
 const KURIKOSHI = '前年度繰越金';
 
 /* ---------- 初期値 ---------- */
 const DEFAULT_ACCOUNTS = [
-  { id: 'ku', name: '区会計', fullName: '荒谷区会計', layout: 'tate' },
+  { id: 'ku', name: '区会計', fullName: '区会計', layout: 'tate' },
   { id: 'rindo', name: '林道会計', fullName: '林道1号会計', layout: 'yoko' },
   { id: 'tokko', name: '篤行会計', fullName: '篤行財産会計', layout: 'yoko' },
   { id: 'kendo', name: '県道会計', fullName: '県道会計', layout: 'yoko' },
@@ -297,11 +299,21 @@ function defaultState() {
     templates: DEFAULT_TEMPLATES.slice(),
     entries: [],
     books: {},
-    settings: { inputMode: 'pick' },
+    settings: { inputMode: 'pick', townName: '' },
     wages: {},
     lastBackup: null,
     seq: 1,
   };
+}
+
+/* ---------- 町の名前（設定で入れる） ---------- */
+function townName() { return (state.settings && state.settings.townName) || ''; }
+function appTitle() { return (townName() ? townName() + ' ' : '') + '会計帳簿'; }
+function filePrefix() { return (townName() ? townName() : '') + '会計'; }
+function showTitle() {
+  document.title = appTitle();
+  const h = document.getElementById('appTitle');
+  if (h) h.textContent = appTitle();
 }
 
 /* ---------- 保存 ---------- */
@@ -325,6 +337,13 @@ function load() {
 }
 // 古い形式で保存されたデータに、あとから増えた設定を補う
 function migrate(st) {
+  st.settings = Object.assign({ inputMode: 'pick', townName: '' }, st.settings || {});
+  // 初期設定ファイル（setup/）で入れた会計の正式な名前を、1回だけ反映する
+  const pending = st.settings.pendingAccountNames;
+  if (pending) {
+    for (const acc of st.accounts) if (pending[acc.id]) acc.fullName = pending[acc.id];
+    delete st.settings.pendingAccountNames;
+  }
   for (const a of st.accounts) {
     if (!a.layout) a.layout = (DEFAULT_ACCOUNTS.find(d => d.id === a.id) || { layout: 'tate' }).layout;
   }
@@ -491,6 +510,7 @@ document.getElementById('tabs').addEventListener('click', ev => {
 });
 
 function render() {
+  showTitle();
   renderNotices();
   const main = $('#main');
   if (ui.tab === 'ledger') renderLedger(main);
@@ -778,7 +798,7 @@ function carryOver(account, fromYear) {
 function claudePrompt() {
   const ins = state.subjects.filter(x => x.type === 'in').map(x => x.name).join('、');
   const outs = state.subjects.filter(x => x.type === 'out').map(x => x.name).join('、');
-  return `荒谷町の会計帳簿をつけています。送る写真（領収書・レシート・通帳など）を読み取って、帳簿に書く形にしてください。
+  return `${townName() ? townName() + 'の' : '地区の'}会計帳簿をつけています。送る写真（領収書・レシート・通帳など）を読み取って、帳簿に書く形にしてください。
 
 【出し方】
 ・1件を1行にして、次の6つをカンマ（,）で区切って出してください。表や説明は不要です。
@@ -1197,12 +1217,12 @@ function renderMaster(main) {
       </div>
       <div class="card"><h2>人名</h2>
         ${chipList(state.people, 'person')}
-        <div class="row"><input type="text" id="newPerson" placeholder="名前（例：荒谷太郎）">
+        <div class="row"><input type="text" id="newPerson" placeholder="名前（例：山田太郎）">
           <input type="text" id="newKana" placeholder="ふりがな（なくても可）">
           <button class="btn" id="addPerson">追加</button></div>
         <h3>まとめて登録</h3>
         <p class="hint">1行に1人ずつ貼り付けてください。「名前,ふりがな」の形でも登録できます。</p>
-        <textarea id="bulkPeople" placeholder="荒谷太郎,あらたにたろう&#10;荒谷花子"></textarea>
+        <textarea id="bulkPeople" placeholder="山田太郎,やまだたろう&#10;山田花子"></textarea>
         <button class="btn" id="addBulk">まとめて追加</button>
       </div>
       <div class="card"><h2>取引先</h2>
@@ -1212,6 +1232,10 @@ function renderMaster(main) {
       <div class="card"><h2>よく使う摘要</h2>
         ${chipList(state.templates, 'template')}
         <div class="row"><input type="text" id="newTemplate" placeholder="例：4月水道料"><button class="btn" id="addTemplate">追加</button></div>
+      </div>
+      <div class="card"><h2>町（地区）の名前</h2>
+        <p class="hint">画面の上・Excel・バックアップのファイル名に出ます。この端末の中にだけ保存されます。</p>
+        <div class="row"><input type="text" id="townName" placeholder="例：○○町" value="${esc(townName())}"><button class="btn" id="saveTown">保存</button></div>
       </div>
       <div class="card"><h2>会計の名前</h2>
         ${state.accounts.map((a, i) => `<div class="row" style="margin-bottom:8px">
@@ -1269,6 +1293,10 @@ function renderMaster(main) {
       state.subjects[Number(inp.dataset.kessan)].kessan = inp.value.trim() || state.subjects[Number(inp.dataset.kessan)].name;
     });
     save(); toast('保存しました'); renderMaster(main);
+  });
+  $('#saveTown').addEventListener('click', () => {
+    state.settings.townName = $('#townName').value.trim();
+    save(); showTitle(); toast('保存しました');
   });
   $('#saveAccounts').addEventListener('click', () => {
     main.querySelectorAll('[data-acc]').forEach(inp => {
@@ -1333,7 +1361,7 @@ function renderExcel(main) {
   });
   $('#btnBackup').addEventListener('click', () => {
     const blob = new Blob([JSON.stringify(state, null, 1)], { type: 'application/json' });
-    download(blob, `荒谷町会計_バックアップ_${todayISO()}.json`);
+    download(blob, `${filePrefix()}_バックアップ_${todayISO()}.json`);
     state.lastBackup = new Date().toISOString(); save(); renderNotices();
   });
   $('#restoreFile').addEventListener('change', async e => {
@@ -1371,7 +1399,7 @@ function isoToExcelDate(iso) { const [y, m, d] = iso.split('-').map(Number); ret
 
 async function exportExcel(years) {
   const wb = new ExcelJS.Workbook();
-  wb.creator = '荒谷町 会計帳簿アプリ';
+  wb.creator = appTitle() + 'アプリ';
   const info = wb.addWorksheet(SHEET_INFO);
   const master = wb.addWorksheet(SHEET_MASTER);
 
@@ -1433,7 +1461,7 @@ async function exportExcel(years) {
   }
 
   info.columns = [{ width: 24 }, { width: 18 }, { width: 14 }, { width: 10 }];
-  info.addRow(['荒谷町 会計帳簿（アプリから書き出し）']).font = { bold: true, size: 14 };
+  info.addRow([appTitle() + '（アプリから書き出し）']).font = { bold: true, size: 14 };
   info.addRow([`作成日：${fullDate(todayISO())}`]);
   info.addRow([]);
   info.addRow(['・科目と摘要の欄は▼で一覧から選べます。一覧にないものは、そのまま打ち込めます。']);
@@ -1449,7 +1477,7 @@ async function exportExcel(years) {
   const buf = await wb.xlsx.writeBuffer();
   const label = years.length === 1 ? `令和${reiwa(years[0])}年度` : '全年度';
   download(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
-    `荒谷町会計_${label}_${todayISO()}.xlsx`);
+    `${filePrefix()}_${label}_${todayISO()}.xlsx`);
   state.lastBackup = new Date().toISOString(); save(); renderNotices();
   toast('Excel を作りました');
 }

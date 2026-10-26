@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>初期設定</title>
+  <style>
+    :root { --bg: #f5f7fa; --card: #fff; --text: #1d2433; --muted: #667085; --line: #dfe5ee; --primary: #3a6ea5; --warn: #fff4dc; --ok: #e9f2e6; color-scheme: light; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #1b1d21; --card: #25282d; --text: #eef0f3; --muted: #a3a9b3; --line: #3a3e45; --primary: #7fa9db; --warn: #3a3017; --ok: #223022; color-scheme: dark; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif; }
+    header { background: var(--primary); color: #fff; padding: calc(env(safe-area-inset-top) + 12px) 16px 12px; }
+    header h1 { margin: 0; font-size: 1.15rem; }
+    main { max-width: 720px; margin: 0 auto; padding: 12px 16px 40px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+    h2 { font-size: 1rem; margin: 0 0 8px; }
+    .hint { color: var(--muted); font-size: .88rem; margin: 6px 0; }
+    .warn { background: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
+    .ok { background: var(--ok); border-radius: 10px; padding: 10px 12px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font: inherit; cursor: pointer;
+      padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+    .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 700; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    ul { padding-left: 20px; margin: 6px 0; }
+    li { margin: 2px 0; }
+    a { color: var(--primary); }
+  </style>
+</head>
+<body>
+  <header><h1>⚙️ 初期設定（まとめて設定）</h1></header>
+  <main>
+    <div class="card">
+      <h2>これは何？</h2>
+      <p class="hint">人の名前・町名・領収書の屋号や住所などを、<b>この端末の中だけ</b>に入れるページです。
+        新しい携帯やパソコンで、自分だけが持っている「初期設定ファイル」を1回読み込むと、各アプリにまとめて設定が入ります。</p>
+      <p class="warn">初期設定ファイルには個人情報が入っています。人に送ったり、GitHub に上げたりしないでください。
+        自分の USB メモリや Google ドライブ（共有しない）に置いてください。</p>
+    </div>
+
+    <div class="card">
+      <h2>📂 初期設定ファイルを読み込む</h2>
+      <p class="hint">すでに入っている帳簿・領収書の履歴・会の記録はそのまま残ります（設定だけが変わります）。</p>
+      <label class="btn primary">📂 ファイルを選ぶ<input type="file" id="file" accept=".json,application/json" hidden></label>
+      <div id="preview"></div>
+    </div>
+
+    <div class="card">
+      <h2>💾 この端末の設定から初期設定ファイルを作る</h2>
+      <p class="hint">この端末に入っている名前・町名・屋号などを、初期設定ファイルとして書き出します（帳簿や履歴は入りません）。設定を直したあとに作り直すと便利です。</p>
+      <button type="button" class="btn" id="export">💾 初期設定ファイルを書き出す</button>
+    </div>
+  </main>
+
+  <script>
+  'use strict';
+  // =============================================================
+  // ⚠️ このファイルに名前・住所などの個人情報を書かないでください（GitHub で公開されています）。
+  // 個人情報は「初期設定ファイル」（.json）に入れて、各自の端末で読み込みます。
+  //
+  // 初期設定ファイルの形：
+  // { kind: 'my-apps-setup', version: 1,
+  //   taikenkai: { members: [{ name, rate, share }] },              … 体験会の材料を出す人（上から1人目・2人目・3人目）
+  //   ryoshusho: { business: { zip, address, tel, regNo }, issuers: ['屋号', ...] },  … 領収書の発行元
+  //   kaikei:    { townName, accountFullNames: { ku: '○○区会計' }, people: [{ name, kana }] } }  … 会計帳簿
+  // =============================================================
+  const KIND = 'my-apps-setup';
+  const KEYS = { taikenkai: 'taikenkai-db-v1', ryoshusho: 'ryoshusho-v1', kaikei: 'kaikei-v1' };
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+  function read(key) {
+    try { return JSON.parse(localStorage.getItem(key)) || null; } catch (e) { return null; }
+  }
+  function write(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+
+  // ---------- 体験会：材料を出す人（名前・返金の割合・等分） ----------
+  // 1人目・2人目・3人目は ID が m_1・m_2・m_3（前の版の ID「m_英字」もこの順番で同じ人）
+  function applyTaikenkai(conf) {
+    const list = (conf.members || []).filter((m) => m && m.name);
+    if (!list.length) return null;
+    const norm = (m) => ({ name: String(m.name), rate: Number.isFinite(+m.rate) ? +m.rate : 80, share: m.share !== false });
+    const d = read(KEYS.taikenkai);
+    if (d && d.settings && Array.isArray(d.settings.members) && d.settings.members.length) {
+      const targets = d.settings.members.filter((m) => /^m_(\d+|[a-z]+)$/.test(m.id) && m.id !== 'm_other');
+      list.forEach((m, i) => {
+        if (targets[i]) Object.assign(targets[i], norm(m));
+        else {
+          const at = d.settings.members.findIndex((x) => x.id === 'm_other');
+          d.settings.members.splice(at < 0 ? d.settings.members.length : at, 0, { id: 'm_' + (i + 1), ...norm(m) });
+        }
+      });
+      write(KEYS.taikenkai, d);
+    } else {
+      const members = list.map((m, i) => ({ id: 'm_' + (i + 1), ...norm(m) }));
+      members.push({ id: 'm_other', name: 'その他', rate: 80, share: false });
+      write(KEYS.taikenkai, { settings: { members }, events: [] });
+    }
+    return `体験会：${list.map((m) => `${m.name}（${norm(m).rate}%）`).join('・')}`;
+  }
+
+  // ---------- 領収書：屋号と、全部の屋号で共通の住所・電話番号・登録番号 ----------
+  function applyRyoshusho(conf) {
+    const b = conf.business || {};
+    const names = (conf.issuers || []).map((x) => String(typeof x === 'string' ? x : x.name || '')).filter(Boolean);
+    if (!names.length && !Object.values(b).some(Boolean)) return null;
+    const d = read(KEYS.ryoshusho) || { settings: {}, receipts: [] };
+    d.settings = d.settings || {};
+    d.receipts = d.receipts || [];
+    d.settings.business = { zip: '', address: '', tel: '', regNo: '', ...(d.settings.business || {}) };
+    for (const k of ['zip', 'address', 'tel', 'regNo']) if (b[k]) d.settings.business[k] = String(b[k]);
+    const cur = (d.settings.issuers || []).filter((x) => x && x.name);
+    if (!cur.length) {
+      d.settings.issuers = names.map((name, i) => ({ id: i === 0 ? 'main' : 'iss_' + uid(), name, zip: '', address: '', tel: '' }));
+      d.settings.issuerId = d.settings.issuers[0].id;
+    } else {
+      names.filter((n) => !cur.some((x) => x.name === n)).forEach((name) => cur.push({ id: 'iss_' + uid(), name, zip: '', address: '', tel: '' }));
+      d.settings.issuers = cur;
+      if (!cur.some((x) => x.id === d.settings.issuerId)) d.settings.issuerId = cur[0].id;
+    }
+    write(KEYS.ryoshusho, d);
+    return `領収書：屋号 ${names.join('・')}／住所・電話番号・登録番号`;
+  }
+
+  // ---------- 会計帳簿：町名・会計の正式な名前・名簿 ----------
+  function applyKaikei(conf) {
+    const has = conf.townName || (conf.people && conf.people.length) || (conf.accountFullNames && Object.keys(conf.accountFullNames).length);
+    if (!has) return null;
+    const d = read(KEYS.kaikei) || {};
+    d.settings = { inputMode: 'pick', ...(d.settings || {}) };
+    if (conf.townName) d.settings.townName = String(conf.townName);
+    const full = conf.accountFullNames || {};
+    if (Array.isArray(d.accounts)) d.accounts.forEach((a) => { if (full[a.id]) a.fullName = full[a.id]; });
+    else if (Object.keys(full).length) d.settings.pendingAccountNames = full; // アプリを開いたときに反映
+    const people = (conf.people || []).map((p) => (typeof p === 'string' ? { name: p, kana: '' } : { name: p.name, kana: p.kana || '' })).filter((p) => p.name);
+    if (people.length) {
+      d.people = Array.isArray(d.people) ? d.people : [];
+      people.forEach((p) => { if (!d.people.some((x) => x.name === p.name)) d.people.push(p); });
+    }
+    write(KEYS.kaikei, d);
+    return `会計帳簿：${conf.townName ? '町名 ' + conf.townName : ''}${people.length ? `／名簿 ${people.length}人` : ''}`;
+  }
+
+  function summary(conf) {
+    const out = [];
+    const t = conf.taikenkai && (conf.taikenkai.members || []).filter((m) => m && m.name);
+    if (t && t.length) out.push(`🧾 体験会の材料を出す人：${t.map((m) => `${m.name}（${m.rate == null ? 80 : m.rate}%）`).join('、')}`);
+    const r = conf.ryoshusho;
+    if (r) {
+      const names = (r.issuers || []).map((x) => (typeof x === 'string' ? x : x.name)).filter(Boolean);
+      const b = r.business || {};
+      if (names.length) out.push(`🧾 領収書の屋号：${names.join('、')}`);
+      if (b.address || b.tel || b.regNo) out.push(`🧾 領収書の共通情報：〒${b.zip || ''} ${b.address || ''}／TEL ${b.tel || ''}／登録番号 ${b.regNo || ''}`);
+    }
+    const k = conf.kaikei;
+    if (k) {
+      if (k.townName) out.push(`📒 会計帳簿の町名：${k.townName}`);
+      const full = Object.values(k.accountFullNames || {});
+      if (full.length) out.push(`📒 会計の正式な名前：${full.join('、')}`);
+      if ((k.people || []).length) out.push(`📒 名簿：${k.people.length}人`);
+    }
+    return out;
+  }
+
+  let loaded = null;
+  $('file').addEventListener('change', async (e) => {
+    const f = e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    try {
+      const conf = JSON.parse(await f.text());
+      if (!conf || conf.kind !== KIND) throw new Error('初期設定ファイルではありません');
+      loaded = conf;
+      const lines = summary(conf);
+      $('preview').innerHTML = `<p class="hint">次の内容をこの端末に設定します：</p><ul>${lines.map((l) => `<li>${esc(l)}</li>`).join('') || '<li>設定する内容がありません</li>'}</ul>
+        <div class="btn-row"><button type="button" class="btn primary" id="apply">✅ この内容で設定する</button></div>`;
+      $('apply').addEventListener('click', apply);
+    } catch (err) {
+      $('preview').innerHTML = `<p class="warn">読み込めませんでした：${esc(err.message)}</p>`;
+    }
+  });
+
+  function apply() {
+    const done = [];
+    try {
+      if (loaded.taikenkai) { const r = applyTaikenkai(loaded.taikenkai); if (r) done.push(r); }
+      if (loaded.ryoshusho) { const r = applyRyoshusho(loaded.ryoshusho); if (r) done.push(r); }
+      if (loaded.kaikei) { const r = applyKaikei(loaded.kaikei); if (r) done.push(r); }
+    } catch (err) {
+      $('preview').innerHTML = `<p class="warn">設定できませんでした：${esc(err.message)}</p>`;
+      return;
+    }
+    $('preview').innerHTML = `<div class="ok"><b>設定しました。</b><ul>${done.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>
+      開いて確かめてください：<a href="../taikenkai/">体験会</a>・<a href="../ryoshusho/">領収書</a>・<a href="../kaikei/">会計帳簿</a></div>`;
+  }
+
+  // この端末の設定から初期設定ファイルを作る（帳簿・履歴は入れない）
+  $('export').addEventListener('click', () => {
+    const conf = { kind: KIND, version: 1, createdAt: new Date().toISOString(), note: '個人情報が入っています。人に送らないでください。' };
+    const t = read(KEYS.taikenkai);
+    if (t && t.settings && Array.isArray(t.settings.members)) {
+      conf.taikenkai = { members: t.settings.members.filter((m) => m.id !== 'm_other').map((m) => ({ name: m.name, rate: m.rate, share: m.share })) };
+    }
+    const r = read(KEYS.ryoshusho);
+    if (r && r.settings) {
+      conf.ryoshusho = { business: r.settings.business || {}, issuers: (r.settings.issuers || []).map((x) => x.name).filter(Boolean) };
+    }
+    const k = read(KEYS.kaikei);
+    if (k) {
+      conf.kaikei = { townName: (k.settings && k.settings.townName) || '',
+        accountFullNames: Object.fromEntries((k.accounts || []).map((a) => [a.id, a.fullName])),
+        people: (k.people || []).map((p) => ({ name: p.name, kana: p.kana || '' })) };
+    }
+    const blob = new Blob([JSON.stringify(conf, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '初期設定.json';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+  </script>
+</body>
+</html>

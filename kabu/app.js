@@ -11,7 +11,7 @@ const LOCAL_BASE = './data/';
 const LS = { budget: 'kabu.budget', cache: 'kabu.cache', horizon: 'kabu.horizon', voice: 'kabu.voice' };
 const DEFAULT_BUDGET = 50000;
 const BUDGET_PRESETS = [10000, 30000, 50000, 100000, 300000];
-const TITLES = { today: '今日のまとめ', picks: '買うなら？', calendar: '日程・配当', stories: '企業の裏話', settings: '設定' };
+const TITLES = { today: '今日のまとめ', learn: '株の学校', picks: '買うなら？', calendar: '予定・配当', stories: '企業の裏話', settings: '設定' };
 const HORIZON = { long: '長期向き', short: '短期向き', both: '長期・短期' };
 
 const state = { tab: 'today', data: null, base: LOCAL_BASE, dates: [], viewing: null, horizon: 'all' };
@@ -85,12 +85,12 @@ function fitFor(p, budget) {
   const lot = p.price * (p.unit || 100);
   if (lot <= budget) {
     const lots = Math.floor(budget / lot);
-    return { cls: 'ok', text: `✅ 100株＝約${yen(lot)}で予算内（残り約${yen(budget - lot)}）${lots >= 2 ? `。最大${lots * (p.unit || 100)}株まで` : ''}` };
+    return { cls: 'ok', text: `✅ 100株＝約${yen(lot)}で予算内（残り約${yen(budget - lot)}）${lots >= 2 ? `。最大${lots * (p.unit || 100)}株まで` : ''}${p.oddLot && p.kabumini !== false ? '。かぶミニなら1株から少しずつでもOK' : ''}` };
   }
   if (p.oddLot) {
     const n = Math.floor(budget / p.price);
     if (n < 1) return { cls: 'no', text: `❌ 1株でも約${yen(p.price)}。予算を増やすと買えます` };
-    return { cls: 'odd', text: `🟡 100株だと約${yen(lot)}で予算オーバー → 1株ずつ買えるサービスなら最大${n}株（約${yen(n * p.price)}）` };
+    return { cls: 'odd', text: `🟡 100株だと約${yen(lot)}で予算オーバー → ${p.kabumini === false ? '1株ずつ買えるサービス' : 'かぶミニ（1株から）'}なら最大${n}株（約${yen(n * p.price)}）` };
   }
   return { cls: 'no', text: `❌ 100株で約${yen(lot)}。予算オーバーです` };
 }
@@ -111,7 +111,7 @@ function render() {
   renderNotices();
   const main = $('#main');
   if (!d) { main.innerHTML = '<p class="loading">ニュースを読み込めませんでした。電波のよい所でもう一度開いてください。</p>'; return; }
-  main.innerHTML = ({ today: viewToday, picks: viewPicks, calendar: viewCalendar, stories: viewStories, settings: viewSettings })[state.tab]();
+  main.innerHTML = ({ today: viewToday, learn: viewLearn, picks: viewPicks, calendar: viewCalendar, stories: viewStories, settings: viewSettings })[state.tab]();
   syncPlayer();
 }
 
@@ -158,13 +158,16 @@ function viewToday() {
       ${(m.points || []).length ? `<h3>💬 つまりどういうこと？</h3><ul class="points">${m.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}
       <p class="small muted">▲は上がった、▼は下がったという意味です。</p>
     </section>
-    <section class="panel">
-      <h2>📅 これから1週間の大事な予定</h2>
-      ${week.length ? eventRows(week) : '<p class="muted">大きな予定はありません。</p>'}
-      <button type="button" class="btn block" data-tab-go="calendar">もっと先の予定・配当を見る</button>
-    </section>
-    <button type="button" class="btn primary block" data-tab-go="picks">💡 予算${esc(yen(getBudget()))}で買うなら？</button>
+    ${(d.topics || []).length ? `<h2 class="sec-title">📰 今日のトピックス</h2>
+      ${d.topics.map((t) => `<article class="topic"><div class="topic-title">${esc(t.emoji || '📰')} ${esc(t.title)}</div>
+        <p>${esc(t.body)}</p>${t.point ? `<div class="topic-point">👉 つまり：${esc(t.point)}</div>` : ''}${t.learn ? `<div class="topic-learn">📘 覚えておこう：${esc(t.learn)}</div>` : ''}</article>`).join('')}`
+    : `<section class="panel"><h2>📅 これから1週間の大事な予定</h2>${week.length ? eventRows(week) : '<p class="muted">大きな予定はありません。</p>'}</section>`}
+    ${d.swing ? `<div class="swing"><b>📈 ${esc(d.swing.title)}</b>${esc(d.swing.body)}</div>` : ''}
+    ${d.money ? `<div class="money"><b>🏦 ${esc(d.money.title)}</b>${esc(d.money.body)}</div>` : ''}
     ${d.lesson ? `<div class="lesson"><b>📘 ${esc(d.lesson.title)}</b>${esc(d.lesson.body)}</div>` : ''}
+    <button type="button" class="btn primary block" data-tab-go="learn">🎓 今日の授業「${esc(LESSONS[Learn.st.current].title)}」を読む</button>
+    <button type="button" class="btn block" data-tab-go="picks">💡 予算${esc(yen(getBudget()))}で買うなら？（かぶミニ対応）</button>
+    ${(d.topics || []).length && (d.events || []).length ? '<button type="button" class="btn block" data-tab-go="calendar">📅 今週の予定・配当（気になる人だけ）</button>' : ''}
     ${disclaimer()}`;
 }
 
@@ -211,8 +214,8 @@ function viewCalendar() {
   const events = (d.events || []).slice().sort((a, b) => a.date.localeCompare(b.date));
   return `
     <section class="panel">
-      <h2>📅 決算・金利などの予定</h2>
-      <p class="small muted">決算＝会社の成績発表。予想より良いと株価が上がり、悪いと下がりやすい日です。</p>
+      <h2>📅 今週の予定（参考）</h2>
+      <p class="small muted">全部覚えなくて大丈夫。「この日は値動きが大きくなりやすいんだな」くらいでOKです。決算＝会社の通知表の日です。</p>
       ${eventRows(events)}
     </section>
     <section class="panel">
@@ -296,10 +299,19 @@ function buildScript(tab) {
     add('市場の動き', d.market?.summary);
     (d.market?.indices || []).forEach((i) => add('市場の動き', `${i.name}は${i.value}。${spokenChange(i)}`));
     (d.market?.points || []).forEach((p) => add('つまり', p));
-    const week = (d.events || []).filter((e) => { const k = daysBetween(d.date, e.date); return k >= 0 && k <= 7; });
-    if (week.length) add('1週間の予定', 'これから1週間の大事な予定です');
-    week.forEach((e) => add('1週間の予定', `${spokenDate(e.date)}${e.time ? '、' + spokenTime(e.time) : ''}。${e.title}。${e.why}`));
+    if ((d.topics || []).length) {
+      add('トピックス', '今日のトピックスです');
+      d.topics.forEach((t) => { add(t.title, `${t.title}。${t.body}`); if (t.point) add(t.title, `つまり、${t.point}`); });
+    } else {
+      const week = (d.events || []).filter((e) => { const k = daysBetween(d.date, e.date); return k >= 0 && k <= 7; });
+      if (week.length) add('1週間の予定', 'これから1週間の大事な予定です');
+      week.forEach((e) => add('1週間の予定', `${spokenDate(e.date)}${e.time ? '、' + spokenTime(e.time) : ''}。${e.title}。${e.why}`));
+    }
+    if (d.swing) add('スイング', `${d.swing.title}。${d.swing.body}`);
+    if (d.money) add('お金の知識', `${d.money.title}。${d.money.body}`);
     if (d.lesson) add('今日の用語', `${d.lesson.title}。${d.lesson.body}`);
+  } else if (tab === 'learn') {
+    learnScript().forEach((x) => add(x.section, x.text));
   } else if (tab === 'picks') {
     const budget = getBudget();
     add('買うなら', `予算${budget.toLocaleString('ja-JP')}円で買うなら、のアイデアです。${d.plan?.note || ''}`);
@@ -319,7 +331,7 @@ function buildScript(tab) {
   return items;
 }
 
-const TAB_NAMES = { today: '今日のまとめ', picks: '銘柄', calendar: '日程', stories: '裏話', settings: '今日のまとめ' };
+const TAB_NAMES = { today: '今日のまとめ', learn: '株の学校', picks: '銘柄', calendar: '予定', stories: '裏話', settings: '今日のまとめ' };
 function startReading(tab) {
   const items = buildScript(tab);
   if (!items.length) { toast('読み上げる内容がありません'); return; }
@@ -452,6 +464,7 @@ document.addEventListener('click', (e) => {
   if (e.target.closest('.newsvis')) { if (Speaker.state === 'stopped') startReading('today'); else togglePlay(); return; }
   const t = e.target.closest('button'); if (!t) return;
   if (t.closest('#tabbar')) { state.tab = t.dataset.tab; render(); window.scrollTo(0, 0); return; }
+  if (learnClick(t)) return;
   if (t.id === 'budgetChip') { openBudgetSheet(); return; }
   if (t.id === 'dateChip') { openDateSheet(); return; }
   if (t.dataset.tabGo) { state.tab = t.dataset.tabGo; render(); window.scrollTo(0, 0); return; }
@@ -479,6 +492,9 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && e.target.id === 'budgetInput' && setBudget(e.target.value)) closeSheet();
 });
 
+// 目標の数字は、入力し終えたとき（決定・欄を離れたとき）に計算し直す
+document.addEventListener('change', (e) => { if (e.target.dataset && e.target.dataset.goal) learnInput(e.target); });
+
 async function init() {
   state.horizon = lsGet(LS.horizon, 'all');
   Speaker.stop();
@@ -486,6 +502,7 @@ async function init() {
   await loadLatest();
   render();
 }
+Learn.load();
 Speaker.init(lsGet(LS.voice, null));
 Speaker.onLine = (line, i, n) => showLine(line, i, n);
 Speaker.onState = () => syncPlayer();

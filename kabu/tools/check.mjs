@@ -31,6 +31,11 @@ if (d.plan) {
 }
 (d.dividends || []).forEach((x, n) => need(isDate(x.lastDay), `dividends[${n}].lastDay`));
 need(Array.isArray(d.stories) && d.stories.length >= 3, 'stories は3つ以上');
+need(Array.isArray(d.topics) && d.topics.length >= 3, 'topics（今日のトピックス）は3つ以上');
+(d.topics || []).forEach((t, n) => need(t.title && t.body && t.point, `topics[${n}] に title/body/point`));
+need(d.swing && d.swing.title && d.swing.body, 'swing（スイングの目で見ると）が必要');
+need(d.money && d.money.title && d.money.body, 'money（NISA・iDeCoのひとこと）が必要');
+(d.picks || []).forEach((p, n) => { if (p.kind === 'stock') need(typeof p.kabumini === 'boolean', `picks[${n}].kabumini は true/false`); });
 need(Array.isArray(d.sources) && d.sources.length >= 3, 'sources は3つ以上');
 
 if (errors.length) { console.error('NG:\n- ' + errors.join('\n- ')); process.exit(1); }

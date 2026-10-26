@@ -340,3 +340,52 @@ body.speaking .nv-jelly .j-legs-a, body.speaking .nv-jelly .j-legs-b { animation
   .nv-track { animation-duration: 90s; }
 }
 .nv-track[hidden], .nv-now[hidden] { display: none; }
+
+/* ---------- 今日のトピックス ---------- */
+.sec-title { margin: 16px 0 6px; }
+.topic { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin: 8px 0; }
+.topic-title { font-weight: 800; font-size: 1.02rem; line-height: 1.5; }
+.topic p { margin: 6px 0; font-size: .95rem; }
+.topic-point { background: var(--primary-soft); color: var(--primary); border-radius: 8px; padding: 6px 10px; font-size: .9rem; font-weight: 700; margin-top: 6px; }
+.topic-learn { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+.swing, .money { border-radius: var(--radius); padding: 12px 14px; margin: 12px 0; font-size: .93rem; }
+.swing { background: var(--short-soft); }
+.money { background: var(--down-soft); }
+.swing b, .money b { display: block; margin-bottom: 4px; }
+
+/* ---------- 学ぶ ---------- */
+.lesson-card { background: var(--card); border: 2px solid var(--primary); border-radius: var(--radius); padding: 14px; margin: 4px 0 12px; }
+.lc-top { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.lc-title { font-size: 1.2rem; margin: 8px 0 4px; color: var(--text); }
+.lc-body { font-size: 1rem; line-height: 1.8; }
+.lc-point { background: var(--warn-soft); border-radius: 10px; padding: 8px 12px; font-weight: 800; margin: 8px 0; }
+.quiz { margin: 10px 0; }
+.quiz .q { font-weight: 800; margin-bottom: 6px; }
+.qc { display: block; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 10px; padding: 10px 12px; margin: 6px 0; font: inherit; cursor: pointer; min-height: 44px; }
+.qc.right { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); font-weight: 800; }
+.qc.wrong { background: var(--up-soft); border-color: var(--up); color: var(--up); }
+.qc.dim { opacity: .55; }
+.qc:disabled { cursor: default; }
+.qa { background: var(--bg); border-radius: 10px; padding: 8px 12px; font-size: .92rem; }
+.progress { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; margin: 12px 0 4px; }
+.progress span { display: block; height: 100%; background: var(--primary); }
+.lc-nav { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
+.lc-nav .btn:disabled { opacity: .4; }
+.goal-form { display: grid; gap: 8px; }
+.goal-form label { display: grid; grid-template-columns: 1fr 120px auto; align-items: center; gap: 6px; font-size: .9rem; font-weight: 700; }
+.goal-form input { min-height: 40px; text-align: right; }
+.goal-result { background: var(--primary-soft); border-radius: 10px; padding: 10px 12px; margin: 10px 0; }
+.goal-result b { color: var(--primary); font-size: 1.1rem; }
+.goal-bars { display: flex; align-items: flex-end; gap: 4px; height: 120px; margin-top: 8px; }
+.gb { flex: 1; display: flex; flex-direction: column-reverse; align-items: stretch; height: 100%; position: relative; }
+.gb small { position: absolute; bottom: -18px; left: 0; right: 0; text-align: center; font-size: .65rem; color: var(--muted); }
+.gb-paid { background: var(--line); border-radius: 0 0 3px 3px; }
+.gb-gain { background: var(--primary); border-radius: 3px 3px 0 0; }
+.goal-bars + p { margin-top: 24px; }
+.guide { border-top: 1px solid var(--line); padding: 8px 0; }
+.guide summary { cursor: pointer; font-weight: 800; padding: 4px 0; }
+.guide ul { margin: 6px 0 4px; padding-left: 1.2em; font-size: .92rem; }
+.guide li { margin: 4px 0; }
+.lesson-list { display: grid; gap: 4px; }
+.ll { text-align: left; border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 8px; padding: 8px 10px; font: inherit; font-size: .9rem; cursor: pointer; }
+.ll.cur { border-color: var(--primary); font-weight: 800; }

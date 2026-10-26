@@ -1,13 +1,15 @@
 // オフラインでも開けるように、アプリ本体（画面のファイル）だけを保存しておく仕組みです。
 // 毎日のニュース（data/）は、つながるときは常に最新を取りに行きます。
 // アプリを更新したときは CACHE_NAME の数字を上げると確実に反映されます。
-const CACHE_NAME = 'kabu-app-v2';
+const CACHE_NAME = 'kabu-app-v3';
 const FILES = [
   './',
   './index.html',
   './style.css',
   './jelly.js',
   './speech.js',
+  './lessons.js',
+  './learn.js',
   './app.js',
   './manifest.webmanifest',
   './icons/icon-192.png',

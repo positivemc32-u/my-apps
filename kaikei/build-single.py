@@ -1,6 +1,6 @@
 """index.html・style.css・app.js・ExcelJS を1つの HTML ファイルにまとめる。
-ダブルクリックだけで開ける「荒谷町会計アプリ.html」を作るためのもの。
-使い方: python3 aratani/build-single.py
+ダブルクリックだけで開ける「会計帳簿アプリ.html」を作るためのもの。
+使い方: python3 kaikei/build-single.py
 """
 from pathlib import Path
 
@@ -18,5 +18,5 @@ html = html.replace('<script src="vendor/exceljs.min.js"></script>',
                     '<script>\n' + inline('vendor/exceljs.min.js') + '\n</script>')
 html = html.replace('<script src="app.js"></script>', '<script>\n' + inline('app.js') + '\n</script>')
 assert 'src="' not in html, '外部ファイルの読み込みが残っています'
-(d / '荒谷町会計アプリ.html').write_text(html, encoding='utf-8')
-print('作成しました:', d / '荒谷町会計アプリ.html')
+(d / '会計帳簿アプリ.html').write_text(html, encoding='utf-8')
+print('作成しました:', d / '会計帳簿アプリ.html')

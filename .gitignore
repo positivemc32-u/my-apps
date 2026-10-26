@@ -22,3 +22,9 @@ node_modules/
 
 # 支払いアプリのバックアップ（金額が入っています）
 shiharai_*.json
+
+# 初期設定ファイル（名前・住所などの個人情報が入っています）
+初期設定*.json
+*setup*.json
+ryoshusho_*.json
+taikenkai_*.json

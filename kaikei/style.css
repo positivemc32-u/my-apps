@@ -98,6 +98,12 @@ input[type=checkbox] { width: 26px; height: 26px; vertical-align: middle; }
 .entry-form label { display: flex; flex-direction: column; font-size: 0.9rem; color: var(--sub); min-width: 0; }
 .entry-form input[type=text], .entry-form input[type=number], .entry-form input[type=date], .entry-form select { width: 100%; }
 .entry-form .wide { grid-column: span 3; }
+.entry-form .note { grid-column: 1 / -1; }
+.entry-form textarea { width: 100%; min-height: 2.6em; resize: vertical; overflow: hidden; line-height: 1.5; }
+.balance-bar { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; background: var(--accent-soft); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 0.95rem; }
+.balance-bar .bal-main { font-size: 1.1rem; }
+.balance-bar .bal-main b { font-size: 1.4rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.ledger td.note { white-space: pre-wrap; overflow-wrap: anywhere; min-width: 10em; width: 28%; }
 .entry-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; align-items: center; }
 
 /* 帳簿の表 */
@@ -143,6 +149,7 @@ table.ledger { border-collapse: collapse; width: 100%; background: #fff; }
   .entry-form .wide { grid-column: span 2; }
   .entry-form .tekiyo { grid-column: span 2; }
   .ledger td { white-space: nowrap; }
+  .ledger td.note { white-space: pre-wrap; }
 }
 
 @media print {

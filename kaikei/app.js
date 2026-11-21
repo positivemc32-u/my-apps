@@ -15,7 +15,7 @@ const KURIKOSHI = '前年度繰越金';
 const DEFAULT_ACCOUNTS = [
   { id: 'ku', name: '区会計', fullName: '区会計', layout: 'tate' },
   { id: 'rindo', name: '林道会計', fullName: '林道会計', layout: 'yoko' },
-  { id: 'tokko', name: '財産会計', fullName: '財産会計', layout: 'yoko' },
+  { id: 'tokko', name: '篤行会計', fullName: '篤行会計', layout: 'yoko' },
   { id: 'kendo', name: '県道会計', fullName: '県道会計', layout: 'yoko' },
   { id: 'tokubetsu', name: '特別会計', fullName: '特別会計', layout: 'yoko' },
 ];
@@ -112,6 +112,11 @@ function migrate(st) {
     delete st.settings.pendingAccountNames;
   }
   for (const a of st.accounts) {
+    // 前の版で「財産会計」と書いていたものを、正しい「篤行会計」に直す（帳簿の中身はそのまま）
+    if (a.id === 'tokko') {
+      if (a.name === '財産会計') a.name = '篤行会計';
+      if (a.fullName === '財産会計') a.fullName = '篤行会計';
+    }
     if (!a.layout) a.layout = (DEFAULT_ACCOUNTS.find(d => d.id === a.id) || { layout: 'tate' }).layout;
   }
   return st;
@@ -361,6 +366,12 @@ function renderLedger(main) {
     </div>
     ${startBox}
     <div class="card no-print" id="formCard">
+      <div class="balance-bar">
+        <span class="bal-main">${esc(acc.name)}の残高 <b>${yenAlways(closing)}</b>円</span>
+        <span>収入合計 ${yenAlways(totalIn)}円</span>
+        <span>支払合計 ${yenAlways(totalOut)}円</span>
+        ${book.bank !== undefined && book.bank !== null && book.bank !== '' ? `<span>通帳 ${yenAlways(book.bank)}円 ${book.bank === closing ? '✅' : '⚠ ずれあり'}</span>` : ''}
+      </div>
       <h2>${editing ? '✏ 行を直す' : '➕ 1行書き込む'}</h2>
       <div class="entry-form" id="entryForm">
         <label>年月日<input type="date" id="fDate" value="${esc(d.fDate)}"></label>
@@ -368,9 +379,10 @@ function renderLedger(main) {
         <label class="tekiyo">摘要（人名・取引先・内容）${pickerHTML('fTekiyo', tekiyoGroups(acc.id), d.fTekiyo)}</label>
         <label>収入金額<input type="number" inputmode="numeric" id="fIn" value="${esc(d.fIn)}" min="0" step="1"></label>
         <label>支払金額<input type="number" inputmode="numeric" id="fOut" value="${esc(d.fOut)}" min="0" step="1"></label>
-        <label class="wide">備考（領収書なし など）<input type="text" id="fNote" value="${esc(d.fNote)}"></label>
+        <label class="note">備考（領収書なし など・長くても大丈夫）<textarea id="fNote" rows="2">${esc(d.fNote)}</textarea></label>
         <label>検印<span><input type="checkbox" id="fCheck"${d.fCheck ? ' checked' : ''}> 確認済み</span></label>
       </div>
+      <p class="hint" style="margin:6px 0 0">入れ終わったら <b>Enter キー</b> でも書き込めます（備考の中で改行したいときは Shift＋Enter）。</p>
       <div class="entry-actions">
         <button class="btn primary" id="btnSave">${editing ? '直した内容で保存' : '書き込む'}</button>
         ${editing ? '<button class="btn" id="btnCancel">やめる</button><button class="btn danger" id="btnDelete">この行を消す</button>'
@@ -397,7 +409,7 @@ function renderLedger(main) {
               <td class="num out">${yen(e.expense)}</td>
               <td class="num">${yenAlways(e.balance)}</td>
               <td class="stamp">${e.checked ? '<span class="stamp-mark">会</span>' : ''}</td>
-              <td>${esc(e.note)}</td>
+              <td class="note">${esc(e.note)}</td>
             </tr>`).join('') || '<tr><td colspan="8" class="hint">まだ何も書き込まれていません。</td></tr>'}
           </tbody>
           <tfoot><tr><td colspan="3">合計</td><td class="num">${yenAlways(totalIn)}</td><td class="num">${yenAlways(totalOut)}</td><td class="num">${yenAlways(closing)}</td><td colspan="2"></td></tr></tfoot>
@@ -462,9 +474,10 @@ function bindLedgerEvents(acc, rows, closing) {
     let tekiyo = val('fTekiyo'); if (tekiyo === MANUAL) tekiyo = '';
     const income = toNum(val('fIn'));
     const expense = toNum(val('fOut'));
-    if (!date) return alert('年月日を入れてください。');
-    if (!subject) return alert('科目を選ぶか、入力してください。');
-    if (!income && !expense) return alert('収入金額か支払金額のどちらかを入れてください。');
+    const ask = (msg, id) => { alert(msg); document.getElementById(id)?.focus(); };
+    if (!date) return ask('年月日を入れてください。', 'fDate');
+    if (!subject) return ask('科目を選ぶか、入力してください。', 'fSubject');
+    if (!income && !expense) return ask('収入金額か支払金額のどちらかを入れてください。', 'fIn');
     if (income && expense) return alert('収入と支払の両方に金額が入っています。どちらか一方にしてください。');
     const fy = fiscalYearOf(date);
     if (fy !== ui.year && !(subject === KURIKOSHI)) {
@@ -486,7 +499,21 @@ function bindLedgerEvents(acc, rows, closing) {
     if (tekiyo && subject !== KURIKOSHI && !allCandidates(tekiyoGroups(acc.id).slice(0, 3)).includes(tekiyo)) ui.pendingNew.push({ kind: 'tekiyo', value: tekiyo });
     ui.draft = { fDate: date, fSubject: '', fTekiyo: '', fIn: '', fOut: '', fNote: '', fCheck: false };
     renderLedger($('#main'));
+    document.getElementById('fSubject')?.focus(); // 続けて次の行を入れられるように
   });
+
+  // Enter キーで書き込む（日本語の変換を確定する Enter は除く。備考の Shift＋Enter は改行）
+  $('#entryForm').addEventListener('keydown', e => {
+    if (e.key !== 'Enter' || e.isComposing || e.keyCode === 229) return;
+    if (e.target.id === 'fNote' && e.shiftKey) return;
+    if (e.target.tagName === 'BUTTON') return;
+    e.preventDefault();
+    setTimeout(() => $('#btnSave')?.click(), 0); // 候補（▼）から選んだ値が入ってから
+  });
+  // 備考の欄は、書いた量に合わせて広がる
+  const note = $('#fNote');
+  const grow = () => { note.style.height = 'auto'; note.style.height = note.scrollHeight + 2 + 'px'; };
+  note.addEventListener('input', grow); grow();
 
   $('#btnCancel')?.addEventListener('click', () => { resetForm(); renderLedger($('#main')); });
   $('#btnDelete')?.addEventListener('click', () => {
@@ -1559,7 +1586,7 @@ async function exportExcel(years) {
 
 function writeLedgerSheet(ws, acc, year, rows, subjRange, tekiRange) {
   ws.columns = [
-    { width: 16 }, { width: 16 }, { width: 26 }, { width: 13 }, { width: 13 }, { width: 14 }, { width: 6 }, { width: 20 },
+    { width: 16 }, { width: 16 }, { width: 26 }, { width: 13 }, { width: 13 }, { width: 14 }, { width: 6 }, { width: 36 },
   ];
   ws.mergeCells('A1:H1');
   ws.getCell('A1').value = `${yearLabel(year)}　${acc.fullName}`;
@@ -1586,6 +1613,7 @@ function writeLedgerSheet(ws, acc, year, rows, subjRange, tekiRange) {
       row.getCell(5).value = e.expense || null;
       row.getCell(7).value = e.checked ? '会' : null;
       row.getCell(8).value = e.note || null;
+      row.getCell(8).alignment = { wrapText: true, vertical: 'top' };
     }
     // 収入・支払のどちらかに数字がある行だけ残高を出す（Excel で書き足した行も計算される）
     row.getCell(6).value = {

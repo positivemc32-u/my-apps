@@ -1,0 +1,429 @@
+{
+  "version": 1,
+  "date": "2026-11-24",
+  "updatedAt": "2026-11-24T08:00:00+09:00",
+  "headline": "大どんでん返し！エヌビディアがジェンスン・フアン氏をCEOに復帰させ、株価は1日で31%上がりました。米国株はナスダック+6.5%、ダウ+3.0%で、2025年4月以来の大きな上げです。3連休明けの東京市場は、このニュースを受けて今日取引を再開します。",
+  "market": {
+    "summary": "11/12に辞任したジェンスン・フアン氏が、23日(月)にエヌビディアのCEOに復帰しました。取締役会は全員一致で決めたと発表しています。先週はAI株の大幅安で米国株が「調整」入りしましたが、23日は一転して全面高になりました。ただ、取締役会の調査はまだ続いていて、議員の中には復帰に批判的な声もあります。東京市場は3連休明けの今日24日(火)に取引を再開し、20日(金)の米国の大幅安と23日(月)の大幅高を一度に受け止めます。",
+    "indices": [
+      {
+        "name": "日経平均",
+        "value": "56,436円",
+        "change": "-3,007円（-5.06%）",
+        "dir": "down",
+        "note": "11/20 終値（23日は祝日）。今日24日から取引再開"
+      },
+      {
+        "name": "NYダウ",
+        "value": "49,595ドル",
+        "change": "+1,448ドル（+3.01%）",
+        "dir": "up",
+        "note": "11/23(月) 終値"
+      },
+      {
+        "name": "S&P500",
+        "value": "7,237",
+        "change": "+4.73%",
+        "dir": "up",
+        "note": "11/23 終値。2025年4月以来の大幅高"
+      },
+      {
+        "name": "ナスダック",
+        "value": "24,089",
+        "change": "+6.51%",
+        "dir": "up",
+        "note": "11/23 終値。エヌビディアは+31%"
+      },
+      {
+        "name": "ドル円",
+        "value": "159.0円前後",
+        "change": "やや円安",
+        "dir": "up",
+        "note": "11/23 NY終値の目安（配信元で差あり）"
+      },
+      {
+        "name": "原油(WTI)",
+        "value": "80〜82ドル前後",
+        "change": "下落",
+        "dir": "down",
+        "note": "一時80ドル割れ。OPECが需要の伸びを下方修正（目安）"
+      }
+    ],
+    "points": [
+      "たった1日で「調整入り」から「2025年4月以来の大きな上げ」へ。荒れている相場では、大きく下がった後に大きく戻ることがよくあります。",
+      "フアン氏の復帰で株価は戻りましたが、取締役会の調査はまだ続いています。結果しだいでまた大きく動く可能性があるので注意。",
+      "原油は一時80ドルを割り込みました。ガソリン代などの物価が落ち着く方向で、金利や株にとってはプラスの材料です。"
+    ]
+  },
+  "events": [
+    {
+      "date": "2026-11-24",
+      "time": "9:00",
+      "type": "指標",
+      "title": "今日：3連休明けの東京市場が再開",
+      "why": "20日(金)の米国の大幅安と、23日(月)の大幅高を一度に受け止めます。寄り付き（朝いちばん）は値動きが荒れやすいので、慌てて注文しないこと。"
+    },
+    {
+      "date": "2026-11-25",
+      "time": "",
+      "type": "指標",
+      "title": "米国の10月PCE物価指数",
+      "why": "FRBが一番気にしている物価のものさし。落ち着いていれば「利上げしなくていいかも」と株の反発材料に。"
+    },
+    {
+      "date": "2026-11-26",
+      "time": "",
+      "type": "権利",
+      "title": "11月末の配当・優待の権利付き最終日（米国は感謝祭でお休み）",
+      "why": "11月が決算月の会社の配当・優待は、この日の取引終了までに買って持っている人がもらえます（銘柄は各社のホームページで確認を）。"
+    },
+    {
+      "date": "2026-11-27",
+      "time": "8:30",
+      "type": "指標",
+      "title": "11月の東京都区部の消費者物価（東京CPI）",
+      "why": "全国の物価の先取りデータ。高いと日銀の12月利上げの見方が強まります。"
+    },
+    {
+      "date": "2026-12-09",
+      "time": "",
+      "type": "金利",
+      "title": "FOMC（米国の金利を決める会議）",
+      "why": "結果は日本時間10日(木)早朝。10月は据え置きでしたが2人が利上げを主張。株安で考えが変わるかに注目。"
+    },
+    {
+      "date": "2026-12-18",
+      "time": "昼頃",
+      "type": "金利",
+      "title": "日銀の金融政策決定会合の結果（17〜18日）",
+      "why": "市場は利上げ（今の1.25%から引き上げ）をかなり見込んでいます。利上げなら円高・銀行株高になりやすい。"
+    }
+  ],
+  "plan": {
+    "title": "予算の分け方（例）",
+    "note": "大きく下がって、大きく戻る。こんな相場で一番危ないのは、慌てて売ったり、上がったのを見て慌てて買ったりすることです。つみたて（投資信託）は続けて、株はかぶミニで1株ずつ、何回かに分けて。予算の半分近くは現金で残しておきましょう。",
+    "parts": [
+      {
+        "label": "長期でコツコツ（投資信託）",
+        "ratio": 0.4,
+        "horizon": "long"
+      },
+      {
+        "label": "配当がもらえる株（少しずつ）",
+        "ratio": 0.2,
+        "horizon": "long"
+      },
+      {
+        "label": "様子見の現金（底を確かめてから）",
+        "ratio": 0.4,
+        "horizon": "short"
+      }
+    ]
+  },
+  "picks": [
+    {
+      "id": "allcountry",
+      "kind": "fund",
+      "name": "全世界株式のインデックス投資信託（通称オルカン）",
+      "code": "投資信託",
+      "horizon": "long",
+      "price": 100,
+      "unit": 1,
+      "priceText": "100円から",
+      "priceDate": "",
+      "oddLot": true,
+      "dividend": "配当は出さずに自動で再投資",
+      "reason": "世界中の約3,000社にまとめて投資する「福袋」。荒れた週でも、毎月同じ金額で買う“つみたて”なら、安い時に自動で多く買えます。",
+      "risk": "今のように世界の株が下がる時は一緒に下がります。10年以上持つつもりで、下がっても積み立てを止めないことが大事。",
+      "howTo": "新NISAの「つみたて投資枠」で毎月決まった額を。楽天証券なら100円から。",
+      "tag": "まず最初の1本"
+    },
+    {
+      "id": "9434",
+      "kind": "stock",
+      "name": "ソフトバンク（携帯会社）",
+      "code": "9434",
+      "horizon": "long",
+      "price": 244,
+      "unit": 100,
+      "priceText": "",
+      "priceDate": "11/20 終値の目安",
+      "oddLot": true,
+      "dividend": "配当利回り約3.6%（目安）",
+      "reason": "日経平均が5%下がった20日も-1.3%と小さな下げ。11/9の決算で1年の見通しを引き上げました。スマホ代という“毎月入るお金”で稼ぐ守りの株で、100株でも約2.4万円。",
+      "risk": "親会社ソフトバンクグループ（9984）とは別の会社。大きな値上がりは期待しにくい。",
+      "howTo": "100株でも予算内。かぶミニなら1株から。",
+      "tag": "配当・守り",
+      "kabumini": true
+    },
+    {
+      "id": "8306",
+      "kind": "stock",
+      "name": "三菱UFJフィナンシャル・グループ（銀行）",
+      "code": "8306",
+      "horizon": "long",
+      "price": 3024,
+      "unit": 100,
+      "priceText": "",
+      "priceDate": "11/20 終値",
+      "oddLot": true,
+      "dividend": "配当は毎年増える傾向",
+      "reason": "日銀が12月に利上げすると見られていて、金利が上がると銀行は儲かりやすい。11/13の決算で自社株買いも発表しました。",
+      "risk": "20日は-5.4%と大きく下げ、4日続けて下落中。銀行株もリスク回避の売りに巻き込まれています。下げ止まりを確認してから。",
+      "howTo": "100株だと約30万円で予算オーバー。かぶミニなら1株（約3,000円）から。",
+      "tag": "日銀の利上げに注目",
+      "kabumini": true
+    },
+    {
+      "id": "7203",
+      "kind": "stock",
+      "name": "トヨタ自動車",
+      "code": "7203",
+      "horizon": "long",
+      "price": 3312,
+      "unit": 100,
+      "priceText": "",
+      "priceDate": "11/20 終値",
+      "oddLot": true,
+      "dividend": "配当あり（年2回）",
+      "reason": "AIとは直接関係が薄く、20日も-2.0%と日経平均よりずっと小さな下げ。11/19には証券会社の目標株価引き上げもありました。",
+      "risk": "円高が進むと輸出の利益が減ります。米国の関税の行方にも注意。",
+      "howTo": "かぶミニで1株から。一度に買わず、何回かに分けて。",
+      "tag": "AI以外の大型株",
+      "kabumini": true
+    },
+    {
+      "id": "nvda",
+      "kind": "watch",
+      "name": "エヌビディア・アンソロピックなど米国のAI株",
+      "code": "米国株",
+      "horizon": "short",
+      "price": 0,
+      "unit": 1,
+      "priceText": "今は見るだけ",
+      "priceDate": "",
+      "oddLot": true,
+      "dividend": "",
+      "reason": "今回の大波乱の中心。20日に約14%下落したあと、フアン氏のCEO復帰で23日に31%上昇と、1日で数十%動く状態です。",
+      "risk": "取締役会の調査はまだ続いています。ニュース1つで大きく上下するので、初心者が飛びつくと大ケガをしやすい場面。",
+      "howTo": "買わずに「なぜ下がったか」「いつ下げ止まるか」をニュースで追うだけで十分な勉強になります。",
+      "tag": "見るだけ"
+    },
+    {
+      "id": "6857",
+      "kind": "watch",
+      "name": "アドバンテスト・ソフトバンクグループ（日本のAI株）",
+      "code": "6857 / 9984",
+      "horizon": "short",
+      "price": 0,
+      "unit": 100,
+      "priceText": "今は見るだけ",
+      "priceDate": "",
+      "oddLot": true,
+      "dividend": "",
+      "reason": "20日の日経平均3,007円安を引っぱった銘柄たち。米国のAI株が23日に急反発したので、今日は大きく上がって始まる可能性があります。",
+      "risk": "大きく上がって始まった株は、その日のうちに売られて値を下げることも多い。高いところを追いかけて買わないように。",
+      "howTo": "見るだけ。「上がり始めて数日たってから」でも遅くありません。",
+      "tag": "見るだけ"
+    }
+  ],
+  "dividends": [],
+  "stories": [
+    {
+      "tag": "人事",
+      "title": "エヌビディア：ジェンスン・フアン氏がCEOに電撃復帰",
+      "body": "11月12日に辞任したフアン氏が、23日にCEO・社長・取締役に復帰しました。取締役会は話し合いを重ねたうえで全員一致で決め、米国政府の幹部からも意見を聞いたと説明しています。暫定CEOだった財務トップのコレット・クレス氏から、わずか11日でバトンが戻った形です。ただし、法律事務所を使った取締役会の調査は最後まで続けるとしていて、議員の中には批判の声もあります。"
+    },
+    {
+      "tag": "世界",
+      "title": "中国のAI株も大きく下落、約170兆円が消える",
+      "body": "Investing.comによると、中国のAI関連株は6月下旬から合わせて約1.7兆ドル（約170兆円）の時価総額を失いました。AIブームの調整は米国だけの話ではなく、世界中のAI株に広がっています。"
+    },
+    {
+      "tag": "世界",
+      "title": "アンソロピックが上場。でもAI株の売りは止まらず",
+      "body": "AI「Claude」を作るアンソロピックが11月19日に上場。公開価格83ドルに対し、初日は111.50ドルで始まり97.17ドルで終えました。「AI株を元気づけるかも」という期待もありましたが、翌日は他のAI株と一緒に下落。新しい株を買うために、ほかのAI株を売った人もいたのでは、という分析もあります。"
+    },
+    {
+      "tag": "人事",
+      "title": "HP：製薬大手GSKの元トップが新CEOに（2027年1月就任）",
+      "body": "パソコンのHPは、英製薬大手GSKを2017〜2025年に率いたエマ・ウォルムズリー氏を新CEOに選びました。就任は2027年1月4日。パソコン部品のメモリーが足りず値上がりしている難しい時期に、業界の外から“立て直しのプロ”を迎えます。"
+    },
+    {
+      "tag": "人事",
+      "title": "アドビ：12月1日に新CEOへバトンタッチ",
+      "body": "PhotoshopのアドビはCEOのシャンタヌ・ナラヤン氏が会長に回り、12月1日からアニル・チャクラヴァルティ氏がCEOに。データ管理会社インフォマティカで4年間CEOを務めた人です。AIの新しいライバルが増える中での交代です。"
+    }
+  ],
+  "lesson": {
+    "title": "今日の用語：「ボラティリティ」",
+    "body": "株価の値動きの大きさのこと。ボラティリティが高い＝上にも下にも大きく動く状態です。今のエヌビディアは、20日に-14%、23日に+31%と、とてもボラティリティが高い状態。こういう時は、少しの金額でも損益が大きくぶれます。初心者は、ボラティリティが高い時ほど買う量を少なくするのが身を守るコツです。"
+  },
+  "sources": [
+    {
+      "title": "CNBC：Jensen Huang reinstated as Nvidia CEO. Stock skyrockets 31%",
+      "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html"
+    },
+    {
+      "title": "NVIDIA：Statement from NVIDIA Board of Directors",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/Statement-from-NVIDIA-Board-of-Directors/default.aspx"
+    },
+    {
+      "title": "CNN：Jensen Huang reinstated as CEO of Nvidia",
+      "url": "https://www.cnn.com/2026/11/23/business/live-news/jensen-huang-reinstated-as-ceo-of-nvidia"
+    },
+    {
+      "title": "CNBC：Dow soars 1,400 points; Nasdaq surges 6%",
+      "url": "https://www.cnbc.com/2026/11/22/stock-market-today-live-updates.html"
+    },
+    {
+      "title": "ABC News：Stock market rebounds sharply after sell-off",
+      "url": "https://abcnews.com/Business/stock-market-rebounds-sharply-after-selloff/story?id=138373790"
+    },
+    {
+      "title": "ザイFX：11月23日のNY為替・原油概況",
+      "url": "https://zai.diamond.jp/articles/-/499537"
+    },
+    {
+      "title": "Investing.com：11月23日のNY為替概況",
+      "url": "https://jp.investing.com/news/forex-news/article-1768224"
+    },
+    {
+      "title": "Forbes JAPAN：ジェンスン・フアンがエヌビディアCEOに電撃復帰",
+      "url": "https://news.yahoo.co.jp/articles/9a1627a4e28984cd31ca9aa38e19905de71ddd3b"
+    },
+    {
+      "title": "日本経済新聞：日経平均は下値探る展開か AI半導体株の期待揺らぐ",
+      "url": "https://nikkei.com/article/DGXZQOUB192BM0Z11C26A1000000"
+    },
+    {
+      "title": "ウエルスアドバイザー：来週の相場展望 日経平均下げ止まりめどは？",
+      "url": "https://finance.yahoo.co.jp/news/detail/3246291f8bee699c5cf0bc325fe92c1bcdaebd17"
+    },
+    {
+      "title": "Investing.com：中国AI株、時価総額170兆円超が消失",
+      "url": "https://jp.investing.com/news/stock-market-news/article-1766946"
+    },
+    {
+      "title": "外為どっとコム：S&P500見通し（11/20〜11/27）",
+      "url": "https://gaitame.com/media/entry/2026/11/20/120634"
+    },
+    {
+      "title": "OANDA証券：日経平均が1日で3,008円安、AI・半導体株に何が起きている？",
+      "url": "https://www.oanda.jp/lab-education/market_news/20261120_nikkei_3000_drop/"
+    },
+    {
+      "title": "株探：日経平均 大引け 3日ぶり急反落（11月20日）",
+      "url": "https://kabutan.jp/news/marketnews/?b=n202611201373"
+    },
+    {
+      "title": "日テレNEWS：日経平均 終値約7か月ぶり5万6000円台",
+      "url": "https://news.yahoo.co.jp/articles/4f3d50b08ce88bfe7ff3ad7fddb3666d7992e888"
+    },
+    {
+      "title": "CNBC：S&P 500 and Dow close in correction; Nasdaq erases 2026 gain",
+      "url": "https://www.cnbc.com/amp/2026/11/19/stock-market-today-live-updates.html"
+    },
+    {
+      "title": "24/7 Wall St.：The Nasdaq-100 Is Now Just 49 Points From a Bear Market",
+      "url": "https://247wallst.com/investing/2026/11/21/the-nasdaq-100-is-now-just-49-points-from-a-bear-market/"
+    },
+    {
+      "title": "STL.News：U.S. Stock Market Weekly Update Ending Nov. 20, 2026",
+      "url": "https://www.stl.news/u-s-stock-market-weekly-update-ending-nov-20-2026/"
+    },
+    {
+      "title": "Axios：Nvidia shares plunge as Anthropic can't stop the AI selloff",
+      "url": "https://www.axios.com/2026/11/20/anthropic-ipo-nvidia-ai-tech-selloff"
+    },
+    {
+      "title": "Fortune：AI stocks are selling off after Anthropic's record IPO",
+      "url": "https://fortune.com/2026/11/20/ai-stocks-selloff-anthropic-record-ipo-wall-street-split-top/"
+    },
+    {
+      "title": "Al Jazeera：Why did Nvidia CEO Jensen Huang resign, and who is Colette Kress?",
+      "url": "https://www.aljazeera.com/news/2026/11/12/why-did-nvidia-ceo-jensen-huang-resign-and-who-is-colette-kress"
+    },
+    {
+      "title": "CNBC：Nvidia stock falls as investors price in fallout from Jensen Huang's resignation",
+      "url": "https://www.cnbc.com/2026/11/16/nvidia-stock-price-jensen-huang.html"
+    },
+    {
+      "title": "Kiplinger：Nvidia Earnings November 2026",
+      "url": "https://www.kiplinger.com/news/live/nvidia-earnings-live-updates-and-commentary-november-2026"
+    },
+    {
+      "title": "ザイFX：ニューヨーク外国為替市場概況・20日",
+      "url": "https://zai.diamond.jp/articles/-/499473"
+    },
+    {
+      "title": "財経新聞：来週の相場で注目すべき3つのポイント（PCE・東京CPI）",
+      "url": "https://www.zaikei.co.jp/article/20261121/878706.html"
+    },
+    {
+      "title": "外為どっとコム：来週の日経平均見通し（11/23〜11/27）",
+      "url": "https://www.gaitame.com/media/entry/2026/11/20/163154"
+    },
+    {
+      "title": "MogWatch：日銀12月会合の利上げ確率",
+      "url": "https://mogwatch.jp/v2/policy/jpy"
+    },
+    {
+      "title": "野村證券：ソフトバンク（9434）株価",
+      "url": "https://quote.nomura.co.jp/nomura/cgi-bin/parser.pl?QCODE=9434&TEMPLATE=nomura_tp_kabu_01&MKTN=T"
+    },
+    {
+      "title": "CP24：Who is HP's new CEO Emma Walmsley?",
+      "url": "https://www.cp24.com/news/money/2026/11/04/who-is-hps-new-ceo-emma-walmsley/"
+    },
+    {
+      "title": "楽天ブックス：窪田剛『株の学校』",
+      "url": "https://books.rakuten.co.jp/rb/13166724/"
+    }
+  ],
+  "topics": [
+    {
+      "emoji": "🔄",
+      "title": "辞めた社長が11日で戻ってきた！",
+      "body": "11月12日にエヌビディアのCEOを辞任したジェンスン・フアン氏が、23日に復帰しました。取締役会は話し合いを重ねたうえで、全員一致で決めたと発表しています。創業から会社を率いてきた“顔”が戻ったことで安心感が広がり、エヌビディアの株価は1日で31%も上がりました。ただ、取締役会の調査はまだ続いていて、議員の中には反対の声もあります。",
+      "point": "会社の「顔」が誰かで、株価は大きく変わる",
+      "learn": "経営者の交代は、会社の業績と同じくらい株価に影響することがあります。"
+    },
+    {
+      "emoji": "🎢",
+      "title": "「最悪の1週間」のあとに「最高の1日」",
+      "body": "先週の米国株は、S&P500が1週間で約8.6%も下がる大荒れでした。ところが23日(月)は一転、ナスダックが+6.5%、S&P500が+4.7%と、2025年4月以来の大きな上げに。大きく下がった日の直後に大きく上がる日が来るのは、荒れた相場ではよくあることです。慌てて売ってしまった人は、この戻りを取りのがしてしまいます。",
+      "point": "大きく下がった直後に、大きく戻ることがある",
+      "learn": "「一番上がった日」と「一番下がった日」は、近い時期に集まりやすいと言われます。"
+    },
+    {
+      "emoji": "🇯🇵",
+      "title": "3連休明けの東京、今日は“まとめて”反応",
+      "body": "日本は23日が祝日でお休みでした。その間に米国では、20日(金)の大幅安と23日(月)の大幅高の両方が起きています。今日の東京市場は、それを一度に受け止めて取引が始まります。アドバンテストなどのAI株が大きく上がって始まる可能性がありますが、朝いちばんの値段は荒れやすいので、慌てて注文しないのが鉄則です。",
+      "point": "休み明けの朝は、値動きが荒くなりやすい",
+      "learn": "取引開始直後（寄り付き）は、前の晩のニュースへの注文が集中して値段が飛びやすい時間です。"
+    },
+    {
+      "emoji": "🛢️",
+      "title": "原油が80ドル割れ。物価にはやさしいニュース",
+      "body": "原油の値段は一時、1バレル80ドルを割り込みました。OPEC（産油国のグループ）が「石油の需要の伸びは思ったより小さい」と見ていることが背景です。原油が下がると、ガソリン代や電気代が落ち着き、物価も上がりにくくなります。金利が上がりにくくなるので、株にとってはプラスの材料です。",
+      "point": "原油安 → 物価が落ち着く → 株に追い風",
+      "learn": "10月は100ドルを超えていた原油が、1か月で2割ほど下がっています（目安）。"
+    },
+    {
+      "emoji": "🗓️",
+      "title": "今週の予定：物価のデータと配当のしめきり",
+      "body": "25日(水)に米国の物価データ（PCE）、26日(木)は11月末の配当・優待の権利付き最終日（米国は感謝祭でお休み）、27日(金)には東京の物価が発表されます。物価が落ち着いていれば「米国は利上げしなくてよさそう」と株の追い風に、高ければ重しになります。",
+      "point": "今週は「物価」が相場の手がかり",
+      "learn": "米国の感謝祭の週は、休みの人が多くて取引が少なくなりやすいと言われます。"
+    }
+  ],
+  "swing": {
+    "title": "スイングの目で見ると（窪田剛さんの考え方を参考に）",
+    "body": "米国株は大きく戻りましたが、1日上がっただけで「上昇トレンドに戻った」とは言えません。窪田さん流の基本は「上昇トレンドに乗る」「下がっている最中に飛びつかない」。今日の日本株は大きく上がって始まる可能性がありますが、高く始まったところを追いかけて買うのは要注意です。先週の安値が下値支持線になって何日かもちこたえ、高値と安値が切り上がり始めたら、上向きに変わったサイン。それを確かめてから、かぶミニで1〜2株。入るなら損切りの値段を先に決めておきましょう。"
+  },
+  "money": {
+    "title": "NISA、今日のひとこと：「上がった日も、下がった日も、つみたては同じ」",
+    "body": "先週の大きな下げと、昨日の大きな上げ。もし毎月同じ金額で“つみたて”をしていれば、どちらの日も気にする必要はありません。下がった月は多くの口数、上がった月は少しの口数を自動で買ってくれるからです。新NISAのつみたて投資枠は年120万円まで、一生で1,800万円の枠があります。値動きを毎日見て一喜一憂しないのも、長く続けるコツです。"
+  }
+}
